@@ -2,6 +2,7 @@ import os
 import json
 from pox.lib.revent import EventMixin
 from pox.core import core
+import pox.forwarding.l2_learning as l2_learning
 
 log = core.getLogger()
 config = {}
@@ -14,14 +15,17 @@ class Firewall(EventMixin):
     def _handle_ConnectionUp(self, event):
         log.debug("Conexion establecida.")
 
-    def parse_config(config_file):
-        with open(config_file, 'r') as json_data:
-            data = json.load(json_data)
+
+def parse_config(config_file):
+	with open(config_file, 'r') as json_data:
+		data = json.load(json_data)
         return data
 
-    def launch(self):
-        l2_learning.launch()
-        global config
-        config = parse_config(config_file)
-        core.registerNew(Firewall)
-        log.debug("Firewall iniciado...:")
+def launch(config_file="rules.json"):
+    '''
+    Starting the Firewall module
+    '''
+    l2_learning.launch()
+    global config
+    config = parse_config(config_file)
+    core.registerNew(Firewall)

@@ -34,10 +34,10 @@ if [ -x pypy/bin/pypy ]; then
 fi
 
 if type python3 > /dev/null 2> /dev/null; then
-  exec python3 $OPT "$0" $FLG "$@"
+  exec python3.8 $OPT "$0" $FLG "$@"
 fi
 
-exec python $OPT "$0" $FLG "$@"
+exec python3.8 $OPT "$0" $FLG "$@"
 '''
 
 from pox.boot import boot
