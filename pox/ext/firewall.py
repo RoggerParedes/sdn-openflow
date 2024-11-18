@@ -17,14 +17,12 @@ class Firewall(EventMixin):
 
 
 def parse_config(config_file):
-	with open(config_file, 'r') as json_data:
-		data = json.load(json_data)
+        with open(config_file, 'r') as json_data:
+            data = json.load(json_data)
         return data
 
 def launch(config_file="rules.json"):
-    '''
-    Starting the Firewall module
-    '''
+    log.debug("Firewall establecido")
     l2_learning.launch()
     global config
     config = parse_config(config_file)
