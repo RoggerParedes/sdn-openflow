@@ -21,22 +21,36 @@ class Firewall(EventMixin):
         if config["firewall"] == event.connection.ports[of.OFPP_LOCAL].name:
             rules = config["rules"]
             self.install_rule1(event, rules["rule_1"]["dst_port"])
-            self.install_rule2(event, rules["rule_2"]["protocol"], rules["rule_2"]["dst_port"], rules["rule_2"]["src_eth"]) #udp, port5001, host1
+            #self.install_rule2(event, rules["rule_2"]["protocol"], rules["rule_2"]["dst_port"], rules["rule_2"]["src_eth"]) #udp, port5001, host1
             self.install_rule3(event, rules["rule_3"]["eth1"], rules["rule_3"]["eth2"])
-            log.debug("Firewall rules installed on %s", dpidToStr(evet.dpid))
+            log.debug("Firewall rules installed on %s", dpidToStr(event.dpid))
 
     def install_rule1(self, event, dst_port):
         log.info("Installing rule 1 on port %s", dst_port)
         msg = of.ofp_flow_mod()
-        msg.match.d1_type = ethernet.IP_TYPE
+        msg.match.dl_type = ethernet.IP_TYPE
         msg.match.tp_dst = dst_port
         msg.match.nw_proto = ipv4.TCP_PROTOCOL
         event.connection.send(msg)
 
         msg2 = of.ofp_flow_mod()
-        msg2.match.d1_type = ethernet.IP_TYPE
+        msg2.match.dl_type = ethernet.IP_TYPE
         msg2.match.tp_dst = dst_port
         msg2.match.nw_proto = ipv4.UDP_PROTOCOL
+        event.connection.send(msg2)
+
+    def install_rule3(self, event, eth1, eth2):
+        log.info("Installing rule 2")
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = ethernet.IP_TYPE
+        msg.match.dl_dst = eth1 # comunicación mac1->mac2
+        msg.match.dl_src = eth2       
+        event.connection.send(msg)
+
+        msg2 = of.ofp_flow_mod()
+        msg2.match.dl_type = ethernet.IP_TYPE
+        msg2.match.dl_dst = eth2 # comunicación mac2->mac1
+        msg2.match.dl_src = eth1
         event.connection.send(msg2)
 
 def parse_config(config_file):
