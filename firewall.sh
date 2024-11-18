@@ -1,3 +1,4 @@
 #!/bin/sh
 cd pox
-sudo ./pox.py log.color log.level --DEBUG firewall
+RULES_FILE="./ext/rules.json"
+sudo ./pox.py log.color log.level --DEBUG firewall --config_file=$RULES_FILE
