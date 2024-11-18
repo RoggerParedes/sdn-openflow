@@ -5,7 +5,6 @@ from pox.core import core
 import pox.forwarding.l2_learning as l2_learning
 
 log = core.getLogger()
-config = {}
 
 class Firewall(EventMixin):
     def __init__(self):
@@ -24,6 +23,5 @@ def parse_config(config_file):
 def launch(config_file="rules.json"):
     log.debug("Firewall establecido")
     l2_learning.launch()
-    global config
     config = parse_config(config_file)
     core.registerNew(Firewall)
