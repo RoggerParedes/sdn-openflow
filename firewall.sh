@@ -2,4 +2,4 @@
 
 cd pox
 
-sudo ./pox.py log.color log.level --DEBUG firewall --config_file=ext/rules.json
+sudo ./pox.py log.level --DEBUG log.color openflow.of_01 forwarding.l2_learning
