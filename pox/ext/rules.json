@@ -1,5 +1,5 @@
 {
-    "firewall" : "switch_1",
+    "firewall" : "s1",
     "rules": {
         "rule_1" : {
             "dst_port": 80
