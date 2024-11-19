@@ -39,6 +39,32 @@ class Firewall(EventMixin):
         msg2.match.nw_proto = ipv4.UDP_PROTOCOL
         event.connection.send(msg2)
 
+    def install_rule2(self, event, protocol, dst_port, src_eth):
+	log.info("Installing rule 2 - protocol: %s - port: %i - src_eth: %s", protocol, dst_port, src_port)
+	msg = of.ofp_flow_mod()
+	msg.match.dl_type = ethernet.IP_TYPE
+	if protocol == "tcp":
+	    msg.match.nw_proto = ipv4.TCP_PROTOCOL
+	if protocol == "udp":	# podria haber otro que no sea udp?
+	    msg.match.nw_proto = ipv4.UDP_PROTOCOL
+	msg.match.tp_dst = int(dst_port)
+	msg.match.dl_src = EthAddr(src_eth)
+	event.connection.send(msg)
+
+
+    def install_rule3(self, event, eth1, eth2):
+        log.info("Installing rule 3")
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = ethernet.IP_TYPE
+        msg.match.dl_dst = EthAddr(eth1) # comunicación mac1->mac2
+        msg.match.dl_src = EthAddr(eth2)
+        event.connection.send(msg)
+        msg2 = of.ofp_flow_mod()
+        msg2.match.dl_type = ethernet.IP_TYPE
+        msg2.match.dl_dst = EthAddr(eth2) # comunicación mac2->mac1
+        msg2.match.dl_src = EthAddr(eth1)
+        event.connection.send(msg2)
+
 def parse_config(config_file):
         with open(config_file, 'r') as json_data:
             data = json.load(json_data)
