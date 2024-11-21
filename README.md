@@ -11,7 +11,7 @@ Para realizar las pruebas es necesario en todos los casos primero:
     2. Ejecutar mininet en otra terminal con el controlador externo
 
         ```
-        $ sudo mn --custom topology.py --topo chain,{CANTIDAD DE SWITCHES} --controller remote
+        $ ./topology.sh <CANTIDAD DE SWITCHES>
         ```
 
     Todas las direcciones de los hosts son del tipo 10.0.0.X, donde X es el número de host que en este trabajo va del 1 al 4.
